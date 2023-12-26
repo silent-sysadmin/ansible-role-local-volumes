@@ -10,9 +10,19 @@ N/A
 
 Role Variables
 --------------
-
-N/A
-
+define dict `locallvs` with properties as shown below. 
+```
+locallvs:
+  - lv_name: "defaultlv"
+    vg_name: "defaultvg"
+    lv_size: "100%FREE"
+    lv_allow_shrink: false
+    target_disk: /dev/vdb
+    fstype: xfs
+    state: mounted
+    automount: true
+    mount_path: /mnt
+```
 Dependencies
 ------------
 
@@ -21,11 +31,22 @@ N/A
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+```
+    - hosts: server
       roles:
-         - { role: username.rolename, x: 42 }
+        - role: silent-sysadmin.logical_volumes
+          vars:
+           locallvs:
+             - lv_name: "defaultlv"
+               vg_name: "defaultvg"
+               lv_size: "100%FREE"
+               lv_allow_shrink: false
+               target_disk: /dev/vdb
+               fstype: xfs
+               state: mounted
+               automount: true
+               mount_path: /mnt
+```
 
 License
 -------
