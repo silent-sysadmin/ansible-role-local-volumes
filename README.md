@@ -1,4 +1,4 @@
-silent-sysadmin.resizefs
+silent-sysadmin.logical_volume
 =========
 
 Resize filesystems on Enterprise Linux hosts.
