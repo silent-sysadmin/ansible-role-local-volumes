@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+platforms:
+  - name: role-logical-volume
+    box: generic/rocky8
+    memory: 512
+    cpus: 1
+    provider_raw_config_args:
+    - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

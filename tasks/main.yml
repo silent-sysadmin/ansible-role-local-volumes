@@ -1,0 +1,37 @@
+---
+- name: Manage LVMs
+  become: true
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+  tags:
+    - partition
+    - parted
+  block:
+    - name: Create volume groups
+      loop: "{{ locallvs }}"
+      community.general.lvg:
+        vg: "{{ item.vg_name }}"
+        pvs: "{{ item.target_disk }}"
+
+    - name: Create logical volumes
+      loop: "{{ locallvs }}"
+      community.general.lvol:
+        vg: "{{ item.vg_name }}"
+        lv: "{{ item.lv_name }}"
+        size: "{{ item.lv_size }}"
+        shrink: "{{ item.lv_allow_shrink }}"
+    
+    - name: Format additional filesystems
+      loop: "{{ locallvs }}"
+      ansible.builtin.filesystem:
+        fstype: "{{ item.fstype }}"
+        dev: "/dev/mapper/{{ item.vg_name }}-{{item.lv_name}}"
+    
+    - name: Create fstab entries and mount new volumes
+      loop: "{{ locallvs }}"
+      ansible.posix.mount:
+        boot: "{{ item.automount }}"
+        path: "{{ item.mount_path }}"
+        src: "/dev/mapper/{{ item.vg_name }}-{{item.lv_name}}"
+        state: "{{ item.state }}"
+        fstype: "{{ item.fstype }}"

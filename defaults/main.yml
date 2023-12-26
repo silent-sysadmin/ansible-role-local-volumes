@@ -1,0 +1,12 @@
+---
+# Specify volumes to manage. Multiple volumes can be configured via a dict.
+locallvs:
+  - lv_name: "defaultlv"
+    vg_name: "defaultvg"
+    lv_size: "100%FREE"
+    lv_allow_shrink: false
+    target_disk: /dev/vdb
+    fstype: xfs
+    state: mounted
+    automount: true
+    mount_path: /mnt
